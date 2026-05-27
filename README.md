@@ -1,135 +1,142 @@
-# Turborepo starter
+# PokeForms
 
-This Turborepo starter is maintained by the Turborepo core team.
+Production-style Typeform-inspired form builder SaaS built from the required `piyushgarg-dev/trpc-monorepo` starter.
 
-## Using this example
+PokeForms lets creators build dynamic Pokemon-world forms, publish public or unlisted links, collect unauthenticated responses, inspect analytics, export CSVs, and browse generated API documentation through Scalar.
 
-Run the following command:
+## Demo
+
+- Web app: `http://localhost:3000`
+- API: `http://localhost:8000`
+- Scalar API docs: `http://localhost:8000/docs`
+- Demo creator email: `demo@pokebuilder.dev`
+- Demo creator password: `Pikachu@2026`
+- Pokemon journey atlas: `http://localhost:3000/journey`
+
+The demo login now bootstraps the demo account automatically after the database is migrated. The seed data includes public and unlisted Ash journey forms, 550+ Pokemon catalog entries, theme gallery records, sample responses, analytics and queued email events.
+
+## Stack
+
+- Turborepo monorepo with separate `apps/web` and `apps/api`
+- Next.js 16 frontend
+- Express API server
+- tRPC for type-safe APIs
+- Zod for shared form, auth and response validation
+- Drizzle ORM with PostgreSQL
+- Scalar API reference generated from `trpc-to-openapi`
+- Shared package `@repo/forms` for schemas, types, validators and Pokemon demo data
+
+## Features
+
+- Email/password authentication with database sessions
+- Forgot password, reset password and change password flows
+- Creator dashboard for form creation and management
+- Dynamic fields: short text, long text, email, number, single select, multi select, checkbox, rating and date
+- Field-level required flags, options and validation rules
+- Publish, unpublish, clone and archive forms
+- Public visibility: shown in Explore
+- Unlisted visibility: published but hidden from public listings
+- Graceful handling for invalid, unpublished, expired and response-limited links
+- Public submission flow without login
+- Rate limiting and honeypot spam protection for public response submissions
+- Response inbox, analytics, daily response bars, choice breakdowns and CSV export
+- Pokemon theme gallery, custom slugs, password-protected forms and QR-style share panel
+- Ash Ketchum 25-season journey page with 550+ Pokemon, images, types, regions, powers and form templates
+- Email event outbox for password reset, creator notification and respondent confirmation flows
+
+## Project Structure
+
+```txt
+apps/
+  api/      Express + tRPC + Scalar
+  web/      Next.js creator and respondent UI
+packages/
+  database/ Drizzle schema and migrations
+  forms/    Shared Zod schemas, dynamic validators and seed constants
+  services/ Auth, form, seed and business logic
+  trpc/     Routers, context and typed client exports
+```
+
+## Local Setup
+
+1. Install dependencies:
 
 ```sh
-npx create-turbo@latest
+corepack pnpm install
 ```
 
-## What's inside?
+2. Create env:
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```sh
+cp .env.example .env
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+3. Start Postgres:
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+```sh
+docker compose up -d
 ```
 
-### Develop
+If this fails on Windows, open Docker Desktop first, wait until the engine is running, then retry the command.
 
-To develop all apps and packages, run the following command:
+4. Apply migrations and seed the demo:
 
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```sh
+corepack pnpm --filter @repo/database db:migrate
+corepack pnpm db:seed
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+Seeding is also triggered by logging in with `demo@pokebuilder.dev` / `Pikachu@2026`, but migrations still need a running Postgres database.
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+5. Run the apps:
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+```sh
+corepack pnpm dev
 ```
 
-### Remote Caching
+Frontend runs on `http://localhost:3000`; API and Scalar docs run on `http://localhost:8000`.
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+## Useful Scripts
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+```sh
+corepack pnpm --filter web build
+corepack pnpm --filter @repo/api build
+corepack pnpm --filter web check-types
+corepack pnpm --filter @repo/trpc exec tsc --noEmit
+corepack pnpm --filter @repo/database db:generate
+corepack pnpm --filter @repo/database db:migrate
+corepack pnpm db:seed
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+The web build script uses `next build --webpack` because the current Next/Turbopack Windows + pnpm symlink combination can fail to resolve Radix transitive packages even when they are installed.
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## API Documentation
 
+Scalar is served by the API app:
+
+- Local docs: `http://localhost:8000/docs`
+- OpenAPI JSON: `http://localhost:8000/openapi.json`
+
+Documented route groups include authentication, creator forms, public listings, public form retrieval and public response submission.
+
+## Visibility Rules
+
+- `public`: form must be `published`; appears on `/explore` and can be submitted by anyone.
+- `unlisted`: form must be `published`; does not appear on `/explore`; direct `/f/:slug` link works.
+- `draft` or `archived`: hidden publicly and rejects submissions.
+- Expired forms and forms past response limit reject submissions with a clear API/UI error.
+
+## Deployment Notes
+
+Deploy `apps/web` and `apps/api` as separate services. Set these environment variables in both places as needed:
+
+```env
+DATABASE_URL=postgres://...
+BASE_URL=https://your-api.example.com
+APP_URL=https://your-web.example.com
+NEXT_PUBLIC_API_URL=https://your-api.example.com/trpc
+NEXT_PUBLIC_API_DOCS_URL=https://your-api.example.com/docs
+NODE_ENV=production
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+Run `corepack pnpm --filter @repo/database db:migrate` and `corepack pnpm db:seed` against the production database before demo judging.

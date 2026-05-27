@@ -1,5 +1,3 @@
-import { db } from "@repo/database";
-import { usersTable } from "@repo/database/schema";
 import { env } from "../env";
 import { googleOAuth2Client } from "../clients/google-oauth";
 import { GetAuthenticationMethodOutputSchema } from "./model";
@@ -8,7 +6,14 @@ class UserService {
   public async getAuthenticationMethods(): Promise<
     ReadonlyArray<GetAuthenticationMethodOutputSchema>
   > {
-    const supportedAuthenticationProviders: GetAuthenticationMethodOutputSchema[] = [];
+    const supportedAuthenticationProviders: GetAuthenticationMethodOutputSchema[] = [
+      {
+        provider: "EMAIL_PASSWORD",
+        displayName: "Email",
+        displayText: "Sign in with email and password",
+        authUrl: "/login",
+      },
+    ];
 
     const isGoogleConfigured = !!(env.GOOGLE_OAUTH_CLIENT_ID && env.GOOGLE_OAUTH_CLIENT_SECRET);
 

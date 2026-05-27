@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       dotenv-cli:
         specifier: ^11.0.0
         version: 11.0.0
@@ -15,6 +18,9 @@ importers:
       prettier:
         specifier: ^3.7.4
         version: 3.7.4
+      tsx:
+        specifier: ^4.21.0
+        version: 4.21.0
       turbo:
         specifier: ^2.7.2
         version: 2.7.2
@@ -163,6 +169,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@repo/forms':
+        specifier: workspace:*
+        version: link:../../packages/forms
       '@repo/trpc':
         specifier: workspace:*
         version: link:../../packages/trpc
@@ -272,6 +281,9 @@ importers:
 
   packages/database:
     dependencies:
+      '@repo/forms':
+        specifier: workspace:*
+        version: link:../forms
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -343,6 +355,22 @@ importers:
         specifier: ^8.50.0
         version: 8.50.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.2)
 
+  packages/forms:
+    dependencies:
+      zod:
+        specifier: ^4.3.5
+        version: 4.3.5
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/logger:
     dependencies:
       winston:
@@ -367,6 +395,9 @@ importers:
       '@repo/database':
         specifier: workspace:*
         version: link:../database
+      '@repo/forms':
+        specifier: workspace:*
+        version: link:../forms
       '@repo/logger':
         specifier: workspace:*
         version: link:../logger
@@ -383,6 +414,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.15.3
       dotenv-cli:
         specifier: ^11.0.0
         version: 11.0.0
@@ -392,6 +426,9 @@ importers:
 
   packages/trpc:
     dependencies:
+      '@repo/forms':
+        specifier: workspace:*
+        version: link:../forms
       '@repo/services':
         specifier: workspace:*
         version: link:../services

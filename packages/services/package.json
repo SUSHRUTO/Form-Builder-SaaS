@@ -2,14 +2,19 @@
   "name": "@repo/services",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "seed": "dotenv -e ../../.env -- tsx seed.ts"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
     "dotenv-cli": "^11.0.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "@repo/database": "workspace:*",
+    "@repo/forms": "workspace:*",
     "@repo/logger": "workspace:*",
     "google-auth-library": "^10.5.0",
     "zod": "^4.3.5"
