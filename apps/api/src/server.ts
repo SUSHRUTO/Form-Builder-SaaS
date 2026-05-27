@@ -22,7 +22,8 @@ const openApiDocument = generateOpenApiDocument(serverRouter, {
 app.set("trust proxy", 1);
 
 const isProduction =
-  env.NODE_ENV === "production" || env.NODE_ENV === "prod";
+  env.NODE_ENV === "production" ||
+  env.NODE_ENV === "prod";
 
 app.use(
   cors({
@@ -54,7 +55,7 @@ app.get("/openapi.json", (req, res) => {
 
 logger.debug(`docs: ${env.BASE_URL}/docs`);
 
-// Dynamic import for ESM package
+// Fix for ESM-only Scalar package
 (async () => {
   const { apiReference } = await import(
     "@scalar/express-api-reference"
