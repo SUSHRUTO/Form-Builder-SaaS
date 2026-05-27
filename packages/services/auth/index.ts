@@ -178,8 +178,14 @@ export class AuthService {
 
 export function serializeSessionCookie(token: string, expiresAt: Date) {
   const nodeEnv = process.env.NODE_ENV as string | undefined;
-  const secure = nodeEnv === "production" || nodeEnv === "prod" ? "; Secure" : "";
-  return `${SESSION_COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax; Expires=${expiresAt.toUTCString()}${secure}`;
+  const isProduction =
+    nodeEnv === "production" || nodeEnv === "prod";
+
+  return `${SESSION_COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=${
+    isProduction ? "None" : "Lax"
+  }; Expires=${expiresAt.toUTCString()}${
+    isProduction ? "; Secure" : ""
+  }`;
 }
 
 export function clearSessionCookie() {
